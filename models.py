@@ -9,21 +9,55 @@ class Playlist(db.Model):
     """Playlist."""
 
     # ADD THE NECESSARY CODE HERE
+    __tablename__ = "playlists"
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    name = db.Column(db.String(50),
+                     nullable=False)
+    description = db.Column(db.Text,
+                            nullable=False)
 
 
 class Song(db.Model):
     """Song."""
 
     # ADD THE NECESSARY CODE HERE
+    __tablename__ = "songs"
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    title = db.Column(db.String(30),
+                      nullable=False)
+    artist = db.Column(db.String(30),
+                       nullable=False)
+
+    playlist = db.relationship("Playlist",
+                               secondary="playlistsongs",
+                               backref="song",
+                               cascade="all, delete")
 
 
 class PlaylistSong(db.Model):
     """Mapping of a playlist to a song."""
 
     # ADD THE NECESSARY CODE HERE
+    __tablename__ = "playlistsongs"
 
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    playlist_id = db.Column(db.Integer,
+                            db.ForeignKey('playlists.id'),
+                            nullable=False)
+    song_id = db.Column(db.Integer,
+                        db.ForeignKey('songs.id'),
+                        nullable=False)
 
 # DO NOT MODIFY THIS FUNCTION
+
+
 def connect_db(app):
     """Connect to database."""
 
